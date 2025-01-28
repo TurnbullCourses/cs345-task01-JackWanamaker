@@ -11,13 +11,22 @@ public class BankAccount {
     /**
      * @throws IllegalArgumentException if balance is <= 0
      */
+    /**
+     * @throws IllegalArgumentException if email is invalid
+     */
+    /**
+     * @throws IllegalArgumentException if balance is <= 0
+     */
     public BankAccount(String email, double startingBalance){
-        if (isEmailValid(email)){
-            this.email = email;
-            this.balance = startingBalance;
+        if (!isEmailValid(email)){
+            throw new IllegalArgumentException("Email address: " + email + " is invalid, cannot create account");
+        }
+        else if (!isAmountValid(startingBalance)){
+            throw new IllegalArgumentException("Invalid balance. Must be greater than 0 and have two or less decimals");
         }
         else {
-            throw new IllegalArgumentException("Email address: " + email + " is invalid, cannot create account");
+            this.email = email;
+            this.balance = startingBalance;
         }
     }
 
@@ -34,8 +43,8 @@ public class BankAccount {
      * @throws InsufficientFundsException if amount is negative or greater than balance
      */
     public void withdraw (double amount) throws InsufficientFundsException{
-        if (amount < 0){
-            throw new IllegalArgumentException("Cannot withdraw a negative amount");
+        if (!isAmountValid(amount)){
+            throw new IllegalArgumentException("Not a valid withdrawal amount");
         }
         else if (amount <= balance){
             balance -= amount;
@@ -55,5 +64,22 @@ public class BankAccount {
         else {
             return true;
         }
+    }
+
+    /**
+     *
+     * @post returns true if the balance is positive, and has two decimal points or less
+     * @throws IllegalArgumentException if negative or has more than two decimal points
+     */
+    public static boolean isAmountValid(double balance){
+        if (balance <= 0){
+            return false;
+        }
+        Double tempDouble = balance;
+        String[] split = tempDouble.toString().split("\\.");
+        if (split[1].length() > 2){
+            return false;
+        }
+        return true;
     }
 }
