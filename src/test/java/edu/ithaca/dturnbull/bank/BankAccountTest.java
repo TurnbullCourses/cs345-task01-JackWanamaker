@@ -9,8 +9,8 @@ class BankAccountTest {
     @Test
     void getBalanceTest() {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
-        assertEquals(200, bankAccount.getBalance(), 0.001);
-        assertThrows(IllegalArgumentException.class, () -> new BankAccount("a@b.com", 0)) ;
+        assertEquals(200, bankAccount.getBalance(), 0.001); //valid balance
+        assertThrows(IllegalArgumentException.class, () -> new BankAccount("a@b.com", 0)) ; //starting balance is 0
     }
 
     @Test
@@ -18,9 +18,9 @@ class BankAccountTest {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
         bankAccount.withdraw(100);
 
-        assertEquals(100, bankAccount.getBalance(), 0.001);
-        assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(300));
-        assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(-100));
+        assertEquals(100, bankAccount.getBalance(), 0.001); //valid withdrawal
+        assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(300)); //withdraws more than present
+        assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(-100)); //withdraws negative amount
     }
 
     @Test
