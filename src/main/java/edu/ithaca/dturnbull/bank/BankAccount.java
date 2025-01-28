@@ -54,6 +54,32 @@ public class BankAccount {
         }
     }
 
+    /**
+     * @post increases th balance by amount if amount is non-negative
+     * @throws IllegalArgumentException if amount is negative
+     */
+    public void deposit (double amount) {
+        if (!isAmountValid(amount)) {
+            throw new IllegalArgumentException("Not a valid deposit amount");
+        } else {
+            balance += amount;
+        }
+    }
+
+    /**
+     * @post reduces the balance by amount and increases account's balance by amount if amount is non-negative and smaller than balance
+     * @throws IllegalArgumentException if amount is negative or greater than balance
+     */
+    public void transfer (BankAccount account, double amount){
+        if (amount <= balance && isAmountValid(amount)){
+            balance -= amount;
+            account.deposit(amount);
+        }
+        else {
+            throw new IllegalArgumentException("Not good enough!");
+        }
+    }
+
 
     public static boolean isEmailValid(String email){
         if (email.indexOf('@') == -1 || email.indexOf('@') == 0 || email.indexOf('@') != email.lastIndexOf('@') 

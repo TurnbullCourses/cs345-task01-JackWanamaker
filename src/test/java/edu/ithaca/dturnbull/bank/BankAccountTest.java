@@ -33,6 +33,31 @@ class BankAccountTest {
     }
 
     @Test
+    void depositTest() {
+        BankAccount bankAccount = new BankAccount("a@b.com", 100);
+        bankAccount.deposit(100);
+        assertEquals(200, bankAccount.getBalance(), 0.001); //valid deposit
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-100)); //deposit negative amount
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(100.123)); //deposit more than 2 decimals
+        bankAccount.deposit(50.12);
+        assertEquals(250.12, bankAccount.getBalance(), 0.001); //valid deposit
+    }
+
+    @Test
+    void transferTest() {
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        BankAccount bankAccount2 = new BankAccount("a@b.com", 100);
+        bankAccount.transfer(bankAccount2, 50);
+        assertEquals(150, bankAccount.getBalance(), 0.001); //valid transfer
+        assertEquals(150, bankAccount2.getBalance(), 0.001); //valid transfer
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(bankAccount2, -100)); //transfer negative amount
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(bankAccount2, 100.123)); //transfer more than 2 decimals
+        bankAccount.transfer(bankAccount2, 50.12);
+        assertEquals(200.12, bankAccount2.getBalance(), 0.001); //valid transfer
+        assertEquals(99.88, bankAccount.getBalance(), 0.001); //valid transfer
+    }
+
+    @Test
     void isEmailValidTest(){
         assertTrue(BankAccount.isEmailValid( "a@b.com"));   // valid email address
         assertFalse( BankAccount.isEmailValid(""));// empty string
@@ -63,6 +88,7 @@ class BankAccountTest {
         assertEquals(200.12, bankAccount3.getBalance(), 0.001); //Positive, two decimal
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("a@b.com", 200.123)); //Invalid 3 decimals
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("a@b.com", 200.1234567)); //Invalid number of decimals
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("a@b.com", -200.12)); //Negative but good decimal
     }
 
     @Test
@@ -75,6 +101,7 @@ class BankAccountTest {
         assertTrue(isAmountValid(100.12)); // Two decimal
         assertFalse(isAmountValid(100.123)); //Three decimal, invalid
         assertFalse(isAmountValid(100.1234567)); //More than three decimals, invalid
+        assertFalse(isAmountValid(-10.12)); //negative decimal
     }
 
 }
