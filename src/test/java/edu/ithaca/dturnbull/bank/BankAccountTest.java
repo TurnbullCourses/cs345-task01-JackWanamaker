@@ -55,6 +55,7 @@ class BankAccountTest {
         bankAccount.transfer(bankAccount2, 50.12);
         assertEquals(200.12, bankAccount2.getBalance(), 0.001); //valid transfer
         assertEquals(99.88, bankAccount.getBalance(), 0.001); //valid transfer
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.transfer(bankAccount, 100)); //can't transfer to the same account
     }
 
     @Test

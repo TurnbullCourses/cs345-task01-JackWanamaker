@@ -71,6 +71,9 @@ public class BankAccount {
      * @throws IllegalArgumentException if amount is negative or greater than balance
      */
     public void transfer (BankAccount account, double amount){
+        if (account == this){
+            throw new IllegalArgumentException("Cannot transfer to the same account");
+        }
         if (amount <= balance && isAmountValid(amount)){
             balance -= amount;
             account.deposit(amount);
